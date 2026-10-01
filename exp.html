@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>표현 모음</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;500;600;700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #F1F4F3;
+    --card: #FBFCFB;
+    --ink: #1E2A28;
+    --muted: #677875;
+    --faint: #9CAAA7;
+    --line: #D7E0DD;
+    --accent: #2E6E63;
+    --accent-ink: #FFFFFF;
+    --accent-soft: #DCEAE6;
+    --accent2: #B5752B;
+    --accent2-soft: #F3E6D3;
+    --danger: #A3402F;
+    --serif: "Noto Serif KR", "Nanum Myeongjo", "Apple SD Gothic Neo", serif;
+    --sans: "Noto Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif;
+    box-sizing: border-box;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #14191A; --card: #1B2220; --ink: #E6ECEA; --muted: #93A19D;
+      --faint: #56635F; --line: #2B3734; --accent: #6FBBAC; --accent-ink: #0E1A18;
+      --accent-soft: #223733; --danger: #E2897B;
+      --accent2: #E0AA6A; --accent2-soft: #3A2E1D;
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper: #14191A; --card: #1B2220; --ink: #E6ECEA; --muted: #93A19D;
+    --faint: #56635F; --line: #2B3734; --accent: #6FBBAC; --accent-ink: #0E1A18;
+    --accent-soft: #223733; --danger: #E2897B;
+    --accent2: #E0AA6A; --accent2-soft: #3A2E1D;
+  }
+
+  html, body { overflow-x: hidden; }
+  html { scroll-padding-top: calc(env(safe-area-inset-top, 0px) + 16px); }
+  *, *::before, *::after { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--paper); color: var(--ink);
+    font-family: var(--sans); font-size: 16px; line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 680px; margin: 0 auto; padding: 28px 20px 96px; }
+  [hidden] { display: none !important; }
+
+  h1 { font-family: var(--serif); font-weight: 700; font-size: 29px; letter-spacing: -0.01em; margin: 0; }
+  .head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 20px; }
+  .muted { color: var(--muted); font-size: 14px; }
+
+  /* Tabs */
+  .tabs {
+    position: relative; display: flex; overflow-x: auto; margin: 0 0 24px;
+    border-bottom: 1px solid var(--line); scrollbar-width: thin;
+  }
+  .tab {
+    flex-shrink: 0; max-width: 220px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    padding: 11px 16px; margin-bottom: -1px; border-bottom: 3px solid transparent;
+    color: var(--muted); font-size: 15px; font-weight: 500; text-decoration: none;
+    font-family: var(--serif);
+  }
+  .tab:hover { color: var(--ink); background: var(--accent-soft); }
+  .tab[aria-selected="true"] { color: var(--ink); font-weight: 700; border-bottom-color: var(--accent); }
+  .tab.add {
+    position: sticky; right: 0; margin-left: auto; background: var(--paper);
+    color: var(--accent); border-left: 1px solid var(--line); font-family: var(--sans); font-weight: 500;
+  }
+  .tab.add:hover { background: var(--accent-soft); }
+  .intro { margin: 0 0 16px; color: var(--muted); font-size: 14px; }
+
+  /* Panels / forms */
+  .panel {
+    background: var(--card); border: 1px solid var(--line); border-radius: 10px;
+    padding: 18px; display: grid; gap: 14px; margin-bottom: 8px;
+  }
+  .panel.editing { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+  label { display: block; font-size: 13px; font-weight: 500; color: var(--muted); margin-bottom: 6px; }
+  input[type="text"], input[type="search"], textarea {
+    width: 100%; min-width: 0; max-width: 100%; font: inherit; color: var(--ink); background: var(--paper);
+    border: 1px solid var(--line); border-radius: 6px; padding: 10px 12px;
+  }
+  textarea { resize: vertical; min-height: 92px; line-height: 1.75; font-family: var(--serif); }
+  input::placeholder, textarea::placeholder { color: var(--faint); }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  input:focus-visible, textarea:focus-visible { outline-offset: 0; border-color: var(--accent); }
+  .row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+  .check-row { display: flex; align-items: center; gap: 8px; font-size: 14px; color: var(--ink); cursor: pointer; }
+  .check-row input { width: 16px; height: 16px; accent-color: var(--accent); margin: 0; }
+  .group-title { font-size: 13px; font-weight: 600; color: var(--muted); margin: 22px 0 2px; }
+  .group-title:first-child { margin-top: 0; }
+  .group-title.self { color: var(--accent2); }
+  .error { color: var(--danger); font-size: 13px; min-height: 1em; }
+
+  button {
+    font: inherit; font-size: 15px; font-weight: 500; cursor: pointer;
+    border-radius: 6px; padding: 9px 18px; border: 1px solid var(--line);
+    background: transparent; color: var(--ink);
+  }
+  button:hover { border-color: var(--faint); }
+  button.primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+  button.primary:hover { filter: brightness(1.06); }
+  button.small { padding: 4px 10px; font-size: 13px; }
+  button.danger.armed { background: var(--danger); border-color: var(--danger); color: #fff; }
+
+  /* Source autocomplete */
+  .ac { position: relative; }
+  .ac-list {
+    position: absolute; left: 0; right: 0; top: calc(100% + 4px); z-index: 15;
+    margin: 0; padding: 4px; list-style: none; max-height: 240px; overflow-y: auto;
+    background: var(--card); border: 1px solid var(--line); border-radius: 6px;
+    box-shadow: 0 8px 24px rgba(0,0,0,.14);
+  }
+  .ac-list[hidden] { display: none; }
+  .ac-list li { padding: 9px 12px; border-radius: 4px; cursor: pointer; overflow-wrap: anywhere; font-size: 14px; }
+  .ac-list li:hover, .ac-list li.active { background: var(--accent-soft); }
+  .ac-list .ac-head { padding: 6px 12px 2px; font-size: 11px; color: var(--muted); cursor: default; }
+  .ac-list .ac-head:hover { background: transparent; }
+
+  /* Entry view */
+  .expr-head { margin-bottom: 16px; }
+  .expr-head h1 { font-size: 25px; overflow-wrap: anywhere; }
+  .expr-head .tools { margin-top: 10px; display: flex; gap: 6px; }
+
+  .list-tools { margin: 24px 0 4px; display: flex; align-items: center; gap: 12px; }
+  .list-tools input { flex: 1; }
+  .list-tools .n { color: var(--muted); font-size: 14px; white-space: nowrap; }
+
+  .sent { padding: 18px 0; border-bottom: 1px solid var(--line); display: flex; align-items: flex-start; gap: 6px; }
+  .sent:last-child { border-bottom: 0; }
+  .sent-main { flex: 1; min-width: 0; }
+  .sent-text {
+    cursor: pointer; margin: 0; padding-left: 14px; border-left: 3px solid var(--accent);
+    font-family: var(--serif); font-size: 16px; line-height: 1.8;
+    white-space: pre-wrap; overflow-wrap: anywhere; max-width: 60ch;
+  }
+  .sent-text:not(.open) { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; }
+  .sent-text:hover { background: var(--accent-soft); }
+  .sent-text.self { border-left-color: var(--accent2); }
+  .sent-text.self:hover { background: var(--accent2-soft); }
+  .sent-source { margin: 8px 0 0 17px; font-size: 13px; color: var(--muted); overflow-wrap: anywhere; max-width: 58ch; }
+  mark { background: var(--accent-soft); color: inherit; border-radius: 2px; padding: 0 1px; }
+
+  .more-wrap { position: relative; flex-shrink: 0; }
+  .more {
+    width: 38px; height: 38px; padding: 0; border: 0; border-radius: 50%;
+    display: inline-flex; align-items: center; justify-content: center; color: var(--muted);
+  }
+  .more:hover, .more[aria-expanded="true"] { background: var(--accent-soft); color: var(--ink); }
+  .more svg { width: 19px; height: 19px; fill: currentColor; }
+  .menu {
+    position: absolute; right: 0; top: 100%; z-index: 20; min-width: 128px;
+    background: var(--card); border: 1px solid var(--line); border-radius: 6px;
+    padding: 4px; box-shadow: 0 8px 24px rgba(0,0,0,.14);
+  }
+  .menu[hidden] { display: none; }
+  .menu button {
+    display: block; width: 100%; text-align: left; border: 0; border-radius: 4px;
+    padding: 10px 12px; font-size: 15px; background: transparent;
+  }
+  .menu button:hover { background: var(--accent-soft); }
+  .menu button.danger { color: var(--danger); }
+  .menu button.danger.armed { background: var(--danger); color: #fff; }
+
+  .toast {
+    position: fixed; left: 50%; transform: translateX(-50%);
+    bottom: calc(env(safe-area-inset-bottom, 0px) + 24px); z-index: 30;
+    background: var(--ink); color: var(--paper); padding: 10px 18px; border-radius: 999px; font-size: 14px;
+  }
+  .toast[hidden] { display: none; }
+
+  .empty { margin-top: 24px; padding: 32px 20px; text-align: center; color: var(--muted); border: 1px dashed var(--line); border-radius: 10px; }
+
+  .dl { margin-top: 48px; padding-top: 18px; border-top: 1px solid var(--line); display: grid; gap: 12px; font-size: 14px; color: var(--muted); }
+  .dl p { margin: 0; }
+  details.backup summary { cursor: pointer; }
+  details.backup .inner { margin-top: 12px; display: grid; gap: 10px; }
+  details.backup textarea { font-size: 13px; min-height: 120px; font-family: ui-monospace, Menlo, Consolas, monospace; }
+
+  @media (max-width: 480px) {
+    h1 { font-size: 24px; }
+    .expr-head h1 { font-size: 21px; }
+    .sent-text { font-size: 15px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="head">
+    <h1>표현 모음</h1>
+    <span class="muted" id="home-count"></span>
+  </div>
+
+  <nav class="tabs" id="tabs" role="tablist" aria-label="표현"></nav>
+
+  <!-- 표현 추가 -->
+  <section id="view-add" hidden>
+    <p class="intro">표현을 추가하면 위쪽에 탭으로 나타나요. 탭을 눌러 그 표현이 쓰인 문장을 모을 수 있어요.</p>
+    <div class="panel" id="expr-form">
+      <div>
+        <label for="e-title">표현</label>
+        <input type="text" id="e-title" autocomplete="off" placeholder="예: 걸어가는 표현">
+      </div>
+      <div class="error" id="e-err" role="alert"></div>
+      <div class="row"><button class="primary" id="e-add">표현 추가</button></div>
+    </div>
+  </section>
+
+  <!-- 표현 하나 -->
+  <section id="view-expr" hidden>
+    <div class="expr-head">
+      <h1 id="ex-title"></h1>
+      <div class="tools">
+        <button class="small" id="ex-edit-btn">표현 수정</button>
+        <button class="small danger" id="ex-del-btn">표현 삭제</button>
+      </div>
+    </div>
+
+    <div class="panel" id="expr-edit" hidden>
+      <div>
+        <label for="ee-title">표현</label>
+        <input type="text" id="ee-title" autocomplete="off">
+      </div>
+      <div class="error" id="ee-err" role="alert"></div>
+      <div class="row">
+        <button class="primary" id="ee-save">정보 저장</button>
+        <button id="ee-cancel">취소</button>
+      </div>
+    </div>
+
+    <div class="panel" id="s-form">
+      <div>
+        <label for="s-text">이 표현이 쓰인 문장</label>
+        <textarea id="s-text" placeholder="이 표현을 만난 문장을 입력하거나 붙여넣기"></textarea>
+      </div>
+      <div>
+        <label for="s-source">출처</label>
+        <div class="ac">
+          <input type="text" id="s-source" autocomplete="off" role="combobox" aria-expanded="false" aria-controls="src-list" aria-autocomplete="list" placeholder="예: 한강, 『소년이 온다』 p.52 / 기사 제목">
+          <ul class="ac-list" id="src-list" role="listbox" hidden></ul>
+        </div>
+      </div>
+      <label class="check-row"><input type="checkbox" id="s-self"> 내가 직접 쓴 문장이에요</label>
+      <div class="error" id="s-err" role="alert"></div>
+      <div class="row">
+        <button class="primary" id="s-save">문장 저장</button>
+        <button id="s-cancel" hidden>수정 취소</button>
+      </div>
+    </div>
+
+    <div class="list-tools">
+      <input type="search" id="s-q" placeholder="이 표현의 문장 검색" aria-label="문장 검색">
+      <span class="n" id="s-count"></span>
+    </div>
+    <div id="sentences"></div>
+  </section>
+
+  <div class="dl">
+    <p>모든 표현과 문장을 파일로 내려받아요.</p>
+    <div class="row">
+      <button id="dl-csv">엑셀용 (CSV)</button>
+      <button id="dl-json">백업용 (JSON)</button>
+      <span id="dl-msg" role="status"></span>
+    </div>
+    <details class="backup">
+      <summary>백업 · 복원</summary>
+      <div class="inner">
+        <p>내용은 지금 쓰는 브라우저에만 저장돼요. 다른 기기로 옮기거나 안전하게 보관하려면 내용을 복사해 두세요.</p>
+        <textarea id="backup-text" placeholder="내보내기를 누르면 여기에 내용이 나타나요. 복원할 때는 백업(JSON) 내용을 여기에 붙여넣으세요."></textarea>
+        <div class="row">
+          <button id="export">내보내기</button>
+          <button id="import">불러오기 (합치기)</button>
+          <span id="backup-msg" role="status"></span>
+        </div>
+      </div>
+    </details>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status" hidden></div>
+
+<script>
+(function () {
+  var KEY = "my-expression-collection-v1";
+  var data = { expressions: [], sentences: [] };
+  var collator = new Intl.Collator("ko");
+  var editingSentence = null;
+  var currentExpr = null;
+  var currentTab = null; // "add" 또는 표현 id
+  var sentOpen = {};
+  var KEY_LAST = KEY + "-last";
+
+  function $(id) { return document.getElementById(id); }
+  function newId() { return Date.now().toString(36) + Math.random().toString(36).slice(2, 7); }
+
+  /* ---------- storage ---------- */
+  function load() {
+    try {
+      var raw = localStorage.getItem(KEY);
+      if (raw) {
+        var d = JSON.parse(raw);
+        if (d && Array.isArray(d.expressions) && Array.isArray(d.sentences)) data = d;
+      }
+    } catch (e) { data = { expressions: [], sentences: [] }; }
+  }
+  function persist() {
+    try { localStorage.setItem(KEY, JSON.stringify(data)); return true; }
+    catch (e) { return false; }
+  }
+  function saveOrWarn(errId) {
+    if (!persist()) $(errId).textContent = "이 브라우저에서는 저장할 수 없어요. 아래 백업 · 복원으로 내용을 따로 보관해 주세요.";
+  }
+
+  /* ---------- helpers ---------- */
+  function getExpr(id) { return data.expressions.filter(function (x) { return x.id === id; })[0]; }
+  function countOf(id) { return data.sentences.filter(function (s) { return s.exprId === id; }).length; }
+  function sortedExprs() { return data.expressions.slice().sort(function (a, b) { return collator.compare(a.title, b.title); }); }
+  function sortedSentences(list) { return list.slice().sort(function (a, b) { return (b.created || 0) - (a.created || 0); }); }
+
+  function highlight(el, text, term) {
+    el.textContent = "";
+    if (!term) { el.textContent = text; return; }
+    var lower = text.toLowerCase(), t = term.toLowerCase(), pos = 0, idx;
+    while ((idx = lower.indexOf(t, pos)) > -1) {
+      if (idx > pos) el.appendChild(document.createTextNode(text.slice(pos, idx)));
+      var m = document.createElement("mark");
+      m.textContent = text.slice(idx, idx + t.length);
+      el.appendChild(m);
+      pos = idx + t.length;
+    }
+    if (pos < text.length) el.appendChild(document.createTextNode(text.slice(pos)));
+  }
+  function armDelete(btn, label, armedLabel, action) {
+    btn.addEventListener("click", function () {
+      if (btn.classList.contains("armed")) { action(); }
+      else {
+        btn.classList.add("armed"); btn.textContent = armedLabel;
+        setTimeout(function () { btn.classList.remove("armed"); btn.textContent = label; }, 3000);
+      }
+    });
+  }
+  function closeMenus() {
+    var menus = document.querySelectorAll(".menu");
+    for (var i = 0; i < menus.length; i++) {
+      menus[i].hidden = true;
+      var d = menus[i].querySelector("button.danger");
+      if (d) { d.classList.remove("armed"); d.textContent = "삭제"; }
+      var m = menus[i].parentNode.querySelector(".more");
+      if (m) m.setAttribute("aria-expanded", "false");
+    }
+  }
+  var toastTimer = null;
+  function toast(msg) {
+    var t = $("toast");
+    t.textContent = msg; t.hidden = false;
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () { t.hidden = true; }, 1600);
+  }
+  document.addEventListener("click", function (ev) {
+    if (!ev.target.closest || !ev.target.closest(".menu")) closeMenus();
+  });
+  document.addEventListener("keydown", function (ev) { if (ev.key === "Escape") closeMenus(); });
+
+  /* ---------- tabs / routing ---------- */
+  function route(initial) {
+    var h = location.hash || "";
+    var tab = null;
+    if (h === "#add") tab = "add";
+    else if (h.indexOf("#e-") === 0 && getExpr(h.slice(3))) tab = h.slice(3);
+    if (!tab) {
+      var last = null;
+      try { last = localStorage.getItem(KEY_LAST); } catch (e) {}
+      if (last && getExpr(last)) tab = last;
+      else if (data.expressions.length) tab = sortedExprs()[0].id;
+      else tab = "add";
+    }
+    currentTab = tab;
+    currentExpr = tab === "add" ? null : tab;
+    if (currentExpr) { try { localStorage.setItem(KEY_LAST, currentExpr); } catch (e) {} }
+    render();
+    revealTab();
+    if (!initial) window.scrollTo(0, 0);
+  }
+  function revealTab() {
+    var tabs = $("tabs");
+    var sel = tabs.querySelector('[aria-selected="true"]');
+    if (!sel || sel.classList.contains("add")) return;
+    var l = sel.offsetLeft, r = l + sel.offsetWidth;
+    if (l < tabs.scrollLeft + 8) tabs.scrollLeft = Math.max(0, l - 8);
+    else if (r > tabs.scrollLeft + tabs.clientWidth - 110) tabs.scrollLeft = r - tabs.clientWidth + 110;
+  }
+
+  /* ---------- render ---------- */
+  function render() {
+    $("view-add").hidden = currentTab !== "add";
+    $("view-expr").hidden = !currentExpr;
+    document.title = currentExpr ? getExpr(currentExpr).title + " · 표현 모음" : "표현 모음";
+    $("home-count").textContent = data.expressions.length
+      ? "표현 " + data.expressions.length + "개 · 문장 " + data.sentences.length + "개" : "";
+    renderTabs();
+    if (currentExpr) renderExpr();
+  }
+
+  function renderTabs() {
+    var tabs = $("tabs");
+    tabs.textContent = "";
+    sortedExprs().forEach(function (e) {
+      var a = document.createElement("a");
+      a.className = "tab"; a.href = "#e-" + e.id;
+      a.setAttribute("role", "tab");
+      a.setAttribute("aria-selected", e.id === currentTab ? "true" : "false");
+      a.title = e.title; a.textContent = e.title;
+      tabs.appendChild(a);
+    });
+    var add = document.createElement("a");
+    add.className = "tab add"; add.href = "#add";
+    add.setAttribute("role", "tab");
+    add.setAttribute("aria-selected", currentTab === "add" ? "true" : "false");
+    add.textContent = "+ 표현 추가";
+    tabs.appendChild(add);
+  }
+
+  function renderExpr() {
+    var e = getExpr(currentExpr);
+    $("ex-title").textContent = e.title;
+
+    var term = $("s-q").value.trim();
+    var t = term.toLowerCase();
+    var all = data.sentences.filter(function (s) { return s.exprId === currentExpr; });
+    var matched = all.filter(function (s) {
+      return !t || (s.text + " " + (s.source || "")).toLowerCase().indexOf(t) > -1;
+    });
+    $("s-count").textContent = all.length ? (t ? matched.length + " / " : "") + "문장 " + all.length + "개" : "";
+
+    var box = $("sentences");
+    box.textContent = "";
+    if (!matched.length) {
+      var empty = document.createElement("div");
+      empty.className = "empty";
+      empty.textContent = all.length ? "검색 결과가 없어요." : "이 표현에서 모은 문장이 아직 없어요. 위에서 첫 문장을 저장해 보세요.";
+      box.appendChild(empty);
+      return;
+    }
+
+    var mine = sortedSentences(matched.filter(function (s) { return s.self; }));
+    var others = sortedSentences(matched.filter(function (s) { return !s.self; }));
+
+    if (mine.length) {
+      var h1 = document.createElement("div"); h1.className = "group-title self"; h1.textContent = "내가 쓴 문장";
+      box.appendChild(h1);
+      mine.forEach(function (s) { box.appendChild(buildSentenceRow(s, term)); });
+    }
+    if (others.length) {
+      var h2 = document.createElement("div"); h2.className = "group-title"; h2.textContent = "모은 문장";
+      box.appendChild(h2);
+      others.forEach(function (s) { box.appendChild(buildSentenceRow(s, term)); });
+    }
+  }
+
+  function buildSentenceRow(s, term) {
+      var item = document.createElement("article");
+      item.className = "sent";
+      var main = document.createElement("div"); main.className = "sent-main";
+
+      var p = document.createElement("p");
+      p.className = "sent-text" + (s.self ? " self" : "");
+      p.tabIndex = 0; p.setAttribute("role", "button");
+      var open = (sentOpen[s.id] !== undefined) ? sentOpen[s.id] : !!term;
+      if (open) p.classList.add("open");
+      p.setAttribute("aria-expanded", open ? "true" : "false");
+      highlight(p, s.text, term);
+      var toggle = function () {
+        var sel = window.getSelection ? window.getSelection() : null;
+        if (sel && !sel.isCollapsed && sel.anchorNode && p.contains(sel.anchorNode)) return;
+        var now = !p.classList.contains("open");
+        p.classList.toggle("open", now);
+        p.setAttribute("aria-expanded", now ? "true" : "false");
+        sentOpen[s.id] = now;
+      };
+      p.addEventListener("click", toggle);
+      p.addEventListener("keydown", function (ev) { if (ev.key === "Enter" || ev.key === " ") { ev.preventDefault(); toggle(); } });
+      main.appendChild(p);
+
+      if (s.source) {
+        var src = document.createElement("p");
+        src.className = "sent-source";
+        var wrap = document.createElement("span");
+        highlight(wrap, "출처: " + s.source, term);
+        src.appendChild(wrap);
+        main.appendChild(src);
+      }
+      item.appendChild(main);
+
+      var mwrap = document.createElement("div"); mwrap.className = "more-wrap";
+      var more = document.createElement("button");
+      more.type = "button"; more.className = "more";
+      more.setAttribute("aria-label", "문장 메뉴"); more.setAttribute("aria-haspopup", "menu");
+      more.setAttribute("aria-expanded", "false");
+      more.innerHTML = '<svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="4" r="1.8"/><circle cx="10" cy="10" r="1.8"/><circle cx="10" cy="16" r="1.8"/></svg>';
+      var menu = document.createElement("div"); menu.className = "menu"; menu.setAttribute("role", "menu"); menu.hidden = true;
+
+      var copy = document.createElement("button");
+      copy.type = "button"; copy.setAttribute("role", "menuitem"); copy.textContent = "복사";
+      copy.addEventListener("click", function () {
+        closeMenus();
+        var full = s.text + (s.source ? "\n출처: " + s.source : "");
+        try { navigator.clipboard.writeText(full).then(function () { toast("복사했어요"); }, function () { toast("복사하지 못했어요"); }); }
+        catch (err) { toast("복사하지 못했어요"); }
+      });
+      var edit = document.createElement("button");
+      edit.type = "button"; edit.setAttribute("role", "menuitem"); edit.textContent = "수정";
+      edit.addEventListener("click", function () { closeMenus(); startEditSentence(s.id); });
+      var del = document.createElement("button");
+      del.type = "button"; del.setAttribute("role", "menuitem"); del.className = "danger"; del.textContent = "삭제";
+      del.addEventListener("click", function () {
+        if (del.classList.contains("armed")) {
+          data.sentences = data.sentences.filter(function (x) { return x.id !== s.id; });
+          if (editingSentence === s.id) resetSentenceForm();
+          persist(); render();
+        } else { del.classList.add("armed"); del.textContent = "정말 삭제"; }
+      });
+      menu.appendChild(copy); menu.appendChild(edit); menu.appendChild(del);
+      more.addEventListener("click", function (ev) {
+        ev.stopPropagation();
+        var willOpen = menu.hidden;
+        closeMenus();
+        if (willOpen) { menu.hidden = false; more.setAttribute("aria-expanded", "true"); }
+      });
+      mwrap.appendChild(more); mwrap.appendChild(menu);
+      item.appendChild(mwrap);
+      return item;
+  }
+
+  /* ---------- expressions ---------- */
+  function addExpr() {
+    var title = $("e-title").value.trim();
+    if (!title) { $("e-err").textContent = "표현을 입력해 주세요."; $("e-title").focus(); return; }
+    $("e-err").textContent = "";
+    var e = { id: newId(), title: title, created: Date.now() };
+    data.expressions.push(e);
+    saveOrWarn("e-err");
+    $("e-title").value = "";
+    location.hash = "#e-" + e.id;
+  }
+  function openExprEdit() {
+    var e = getExpr(currentExpr);
+    $("ee-title").value = e.title;
+    $("ee-err").textContent = "";
+    $("expr-edit").hidden = false;
+    $("ee-title").focus();
+  }
+  function saveExprEdit() {
+    var title = $("ee-title").value.trim();
+    if (!title) { $("ee-err").textContent = "표현을 입력해 주세요."; return; }
+    getExpr(currentExpr).title = title;
+    saveOrWarn("ee-err");
+    $("expr-edit").hidden = true;
+    render();
+  }
+
+  /* ---------- sentences ---------- */
+  function resetSentenceForm() {
+    editingSentence = null;
+    $("s-text").value = ""; $("s-source").value = ""; $("s-self").checked = false;
+    $("s-form").classList.remove("editing");
+    $("s-save").textContent = "문장 저장";
+    $("s-cancel").hidden = true;
+    $("s-err").textContent = "";
+    acClose();
+  }
+  function saveSentence() {
+    var text = $("s-text").value.trim();
+    var source = $("s-source").value.trim();
+    var self = $("s-self").checked;
+    if (!text) { $("s-err").textContent = "문장을 입력해 주세요."; $("s-text").focus(); return; }
+    $("s-err").textContent = "";
+    if (editingSentence) {
+      data.sentences.forEach(function (s) { if (s.id === editingSentence) { s.text = text; s.source = source; s.self = self; } });
+    } else {
+      data.sentences.push({ id: newId(), exprId: currentExpr, text: text, source: source, self: self, created: Date.now() });
+    }
+    saveOrWarn("s-err");
+    resetSentenceForm();
+    render();
+    $("s-text").focus();
+  }
+  function startEditSentence(id) {
+    var s = data.sentences.filter(function (x) { return x.id === id; })[0];
+    if (!s) return;
+    editingSentence = id;
+    $("s-text").value = s.text; $("s-source").value = s.source || ""; $("s-self").checked = !!s.self;
+    $("s-form").classList.add("editing");
+    $("s-save").textContent = "수정 저장";
+    $("s-cancel").hidden = false;
+    $("s-form").scrollIntoView({ block: "center" });
+    $("s-text").focus();
+  }
+
+  /* ---------- 출처 자동완성 ---------- */
+  var acList = $("src-list"), acItems = [], acActive = -1;
+  function norm(t) { return String(t).toLowerCase().replace(/\s+/g, ""); }
+  function sourceHistory() {
+    var latest = {};
+    data.sentences.forEach(function (s) {
+      var src = (s.source || "").trim();
+      if (!src) return;
+      var t = s.updated || s.created || 0;
+      if (latest[src] === undefined || latest[src] < t) latest[src] = t;
+    });
+    return Object.keys(latest).sort(function (a, b) { return latest[b] - latest[a]; });
+  }
+  function acMatches() {
+    var raw = $("s-source").value.trim();
+    var all = sourceHistory();
+    if (!raw) return { list: all.slice(0, 6), recent: true };
+    var q = norm(raw);
+    var contiguous = [], scattered = [];
+    all.forEach(function (src) {
+      var n = norm(src);
+      if (n === q) return;
+      if (n.indexOf(q) > -1) { contiguous.push(src); return; }
+      var chars = q.split("");
+      var allIn = chars.length >= 2 && chars.every(function (c) { return n.indexOf(c) > -1; });
+      if (allIn) scattered.push(src);
+    });
+    return { list: contiguous.concat(scattered).slice(0, 6), recent: false };
+  }
+  function acClose() {
+    acList.hidden = true; acList.textContent = ""; acItems = []; acActive = -1;
+    $("s-source").setAttribute("aria-expanded", "false");
+  }
+  function acPick(src) { $("s-source").value = src; acClose(); $("s-source").focus(); }
+  function acSetActive(i) {
+    acActive = i;
+    acItems.forEach(function (li, k) { li.classList.toggle("active", k === i); });
+    if (acItems[i]) acItems[i].scrollIntoView({ block: "nearest" });
+  }
+  function acRender() {
+    var r = acMatches();
+    acList.textContent = ""; acItems = []; acActive = -1;
+    if (!r.list.length) { acList.hidden = true; $("s-source").setAttribute("aria-expanded", "false"); return; }
+    if (r.recent) {
+      var head = document.createElement("li");
+      head.className = "ac-head"; head.setAttribute("role", "presentation");
+      head.textContent = "최근 쓴 출처";
+      acList.appendChild(head);
+    }
+    r.list.forEach(function (src) {
+      var li = document.createElement("li");
+      li.setAttribute("role", "option"); li.textContent = src;
+      li.addEventListener("mousedown", function (ev) { ev.preventDefault(); });
+      li.addEventListener("click", function () { acPick(src); });
+      acList.appendChild(li); acItems.push(li);
+    });
+    acList.hidden = false;
+    $("s-source").setAttribute("aria-expanded", "true");
+  }
+  $("s-source").addEventListener("input", acRender);
+  $("s-source").addEventListener("focus", acRender);
+  $("s-source").addEventListener("blur", function () { setTimeout(acClose, 120); });
+  $("s-source").addEventListener("keydown", function (e) {
+    if (acList.hidden) return;
+    if (e.key === "ArrowDown") { e.preventDefault(); acSetActive((acActive + 1) % acItems.length); }
+    else if (e.key === "ArrowUp") { e.preventDefault(); acSetActive((acActive - 1 + acItems.length) % acItems.length); }
+    else if (e.key === "Escape") { acClose(); }
+    else if (e.key === "Enter" && acActive >= 0) { e.preventDefault(); e.stopImmediatePropagation(); acPick(acItems[acActive].textContent); }
+  });
+
+  /* ---------- download ---------- */
+  function csvCell(v) { return '"' + String(v == null ? "" : v).replace(/\r?\n/g, "\n").replace(/"/g, '""') + '"'; }
+  function buildCsv() {
+    var rows = [["표현", "구분", "문장", "출처"]];
+    sortedExprs().forEach(function (e) {
+      sortedSentences(data.sentences.filter(function (s) { return s.exprId === e.id; })).forEach(function (s) {
+        rows.push([e.title, s.self ? "내가 씀" : "모음", s.text, s.source || ""]);
+      });
+    });
+    return "\uFEFF" + rows.map(function (r) { return r.map(csvCell).join(","); }).join("\r\n");
+  }
+  function dlMsg(m) { $("dl-msg").textContent = m || ""; }
+  function saveFile(filename, content, mime) {
+    if (!data.sentences.length) { dlMsg("저장된 문장이 아직 없어요."); return; }
+    try {
+      var url = URL.createObjectURL(new Blob([content], { type: mime }));
+      var a = document.createElement("a");
+      a.href = url; a.download = filename;
+      document.body.appendChild(a); a.click(); document.body.removeChild(a);
+      setTimeout(function () { URL.revokeObjectURL(url); }, 4000);
+      dlMsg("저장했어요. 다운로드 폴더를 확인해 보세요.");
+    } catch (err) { dlMsg("저장하지 못했어요. 아래 백업 · 복원으로 내용을 복사해 두세요."); }
+  }
+  $("dl-csv").addEventListener("click", function () { saveFile("표현 모음.csv", buildCsv(), "text/csv;charset=utf-8"); });
+  $("dl-json").addEventListener("click", function () { saveFile("표현 모음 백업.json", JSON.stringify(data, null, 2), "application/json"); });
+
+  /* ---------- backup ---------- */
+  function backupMsg(m) { $("backup-msg").textContent = m; }
+  $("export").addEventListener("click", function () {
+    var ta = $("backup-text");
+    ta.value = JSON.stringify(data, null, 2);
+    ta.focus(); ta.select();
+    backupMsg("내용을 전체 복사해서 메모장 등에 보관하세요.");
+  });
+  $("import").addEventListener("click", function () {
+    var raw = $("backup-text").value.trim();
+    if (!raw) { backupMsg("붙여넣은 내용이 없어요."); return; }
+    try {
+      var d = JSON.parse(raw);
+      if (!d || !Array.isArray(d.expressions) || !Array.isArray(d.sentences)) throw new Error("형식 오류");
+      var haveE = {}, haveS = {};
+      data.expressions.forEach(function (e) { haveE[e.id] = true; });
+      data.sentences.forEach(function (s) { haveS[s.id] = true; });
+      var ne = 0, ns = 0;
+      d.expressions.forEach(function (e) {
+        if (e && typeof e.title === "string" && e.title.trim() && e.id && !haveE[e.id]) {
+          data.expressions.push({ id: e.id, title: e.title.trim(), created: e.created || Date.now() });
+          haveE[e.id] = true; ne++;
+        }
+      });
+      d.sentences.forEach(function (s) {
+        if (s && typeof s.text === "string" && s.text.trim() && s.id && !haveS[s.id] && haveE[s.exprId]) {
+          data.sentences.push({ id: s.id, exprId: s.exprId, text: s.text, source: typeof s.source === "string" ? s.source : "", self: !!s.self, created: s.created || Date.now() });
+          haveS[s.id] = true; ns++;
+        }
+      });
+      persist(); render();
+      backupMsg("표현 " + ne + "개, 문장 " + ns + "개를 추가했어요.");
+    } catch (e) {
+      backupMsg("내용을 읽을 수 없어요. 내보내기로 받은 내용 그대로 붙여넣었는지 확인해 주세요.");
+    }
+  });
+
+  /* ---------- events ---------- */
+  $("e-add").addEventListener("click", addExpr);
+  $("e-title").addEventListener("keydown", function (e) { if (e.key === "Enter") { e.preventDefault(); addExpr(); } });
+
+  $("ex-edit-btn").addEventListener("click", openExprEdit);
+  $("ee-cancel").addEventListener("click", function () { $("expr-edit").hidden = true; });
+  $("ee-save").addEventListener("click", saveExprEdit);
+  armDelete($("ex-del-btn"), "표현 삭제", "문장까지 모두 삭제", function () {
+    var id = currentExpr;
+    data.expressions = data.expressions.filter(function (e) { return e.id !== id; });
+    data.sentences = data.sentences.filter(function (s) { return s.exprId !== id; });
+    persist();
+    resetSentenceForm();
+    var rest = sortedExprs();
+    location.hash = rest.length ? "#e-" + rest[0].id : "#add";
+  });
+
+  $("s-save").addEventListener("click", saveSentence);
+  $("s-cancel").addEventListener("click", resetSentenceForm);
+  $("s-q").addEventListener("input", renderExpr);
+  $("s-text").addEventListener("keydown", function (e) {
+    if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) { e.preventDefault(); saveSentence(); }
+  });
+
+  window.addEventListener("hashchange", function () {
+    resetSentenceForm(); $("s-q").value = ""; $("expr-edit").hidden = true; route(false);
+  });
+
+  load();
+  route(true);
+})();
+</script>
+</body>
+</html>
